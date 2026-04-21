@@ -38,14 +38,14 @@ pipeline {
             }
         }
 
-        // stage('Quality Gate') {
-        //     steps {
-        //         script {
-        //             // Ensure SonarQube integration is properly configured to use this step
-        //             waitForQualityGate abortPipeline: false, credentialsId: 'sonar'
-        //         }
-        //     }
-        // }
+        stage('Quality Gate') {
+            steps {
+                script {
+                    // Ensure SonarQube integration is properly configured to use this step
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar'
+                }
+            }
+        }
 
         // stage('OWASP Dependency-Check Scan') {
         //     steps {
