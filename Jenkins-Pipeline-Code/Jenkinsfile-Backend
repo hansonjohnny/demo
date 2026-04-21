@@ -32,7 +32,7 @@ pipeline {
             steps {
                 dir('Todo-app/backend') {
                     withSonarQubeEnv('sonar-server') {
-                        sh "${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=three-tier-backend -Dsonar.projectName=three-tier-backend"
+                        sh "${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=cloud-native-backend -Dsonar.projectName=cloud-native-backend"
                     }
                 }
             }
