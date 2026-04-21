@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        SCANNER_HOME = "${tool 'sonar-scanner'}"
+        // SCANNER_HOME = "${tool 'sonar-scanner'}"
         AWS_ACCOUNT_ID = credentials('ACCOUNT_ID')
         AWS_ECR_REPO_NAME = credentials('ECR_REPO2')
         AWS_DEFAULT_REGION = 'us-east-2'
@@ -24,45 +24,45 @@ pipeline {
 
         stage('Checkout From Git') {
             steps {
-                git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/hansonjohnny/DevSecOps.git'
+                git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/hansonjohnny/demo.git'
             }
         }
 
-        stage('Sonarqube Analysis') {
-            steps {
-                dir('Todo-App/backend') {
-                    withSonarQubeEnv('sonar-server') {
-                        sh "${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=three-tier-backend -Dsonar.projectName=three-tier-backend"
-                    }
-                }
-            }
-        }
+        // stage('Sonarqube Analysis') {
+        //     steps {
+        //         dir('Todo-App/backend') {
+        //             withSonarQubeEnv('sonar-server') {
+        //                 sh "${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=three-tier-backend -Dsonar.projectName=three-tier-backend"
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage('Quality Gate') {
-            steps {
-                script {
-                    // Ensure SonarQube integration is properly configured to use this step
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar'
-                }
-            }
-        }
+        // stage('Quality Gate') {
+        //     steps {
+        //         script {
+        //             // Ensure SonarQube integration is properly configured to use this step
+        //             waitForQualityGate abortPipeline: false, credentialsId: 'sonar'
+        //         }
+        //     }
+        // }
 
-        stage('OWASP Dependency-Check Scan') {
-            steps {
-                dir('Todo-App/backend') {
-                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
-                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-                }
-            }
-        }
+        // stage('OWASP Dependency-Check Scan') {
+        //     steps {
+        //         dir('Todo-App/backend') {
+        //             dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+        //             dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+        //         }
+        //     }
+        // }
 
-        stage('Trivy File Scan') {
-            steps {
-                dir('Application-Code/backend') {
-                    sh 'trivy fs . > trivyfs.txt'
-                }
-            }
-        }
+        // stage('Trivy File Scan') {
+        //     steps {
+        //         dir('Application-Code/backend') {
+        //             sh 'trivy fs . > trivyfs.txt'
+        //         }
+        //     }
+        // }
 
         stage("Docker Image Build") {
             steps {
@@ -86,23 +86,23 @@ pipeline {
             }
         }
 
-        stage("TRIVY Image Scan") {
-            steps {
-                sh 'trivy image ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER} > trivyimage.txt' 
-            }
-        }
+        // stage("TRIVY Image Scan") {
+        //     steps {
+        //         sh 'trivy image ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER} > trivyimage.txt' 
+        //     }
+        // }
 
-        stage('Checkout Code') {
-            steps {
-                 git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/hansonjohnny/DevSecOps.git'
-            }
-        }
+        // stage('Checkout Code') {
+        //     steps {
+        //          git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/hansonjohnny/demo.git'
+        //     }
+        // }
 
-        stage('Update Helm Values') {
-            environment {
-                GIT_REPO_NAME = "DevOps"
-                GIT_USER_NAME = "hansonjohnny"
-            }
+        // stage('Update Helm Values') {
+        //     environment {
+        //         GIT_REPO_NAME = "DevOps"
+        //         GIT_USER_NAME = "hansonjohnny"
+        //     }
             // steps {
             //     script {
             //         dir('helm/backend-chart') {
@@ -132,7 +132,7 @@ pipeline {
             //         }
             //     }
             // }
-        }
+        // }
 
     }
 }
