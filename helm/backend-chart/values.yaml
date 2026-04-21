@@ -1,0 +1,3 @@
+image:
+  repository: 669836379908.dkr.ecr.us-east-1.amazonaws.com/todo-backend
+  tag: latest
