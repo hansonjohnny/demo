@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        // SCANNER_HOME = "${tool 'sonar-scanner'}"
+        SCANNER_HOME = "${tool 'sonar-scanner'}"
         AWS_ACCOUNT_ID = credentials('ACCOUNT_ID')
         AWS_ECR_REPO_NAME = credentials('ECR_REPO2')
         AWS_DEFAULT_REGION = 'us-east-2'
@@ -28,15 +28,15 @@ pipeline {
             }
         }
 
-        // stage('Sonarqube Analysis') {
-        //     steps {
-        //         dir('Todo-App/backend') {
-        //             withSonarQubeEnv('sonar-server') {
-        //                 sh "${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=three-tier-backend -Dsonar.projectName=three-tier-backend"
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Sonarqube Analysis') {
+            steps {
+                dir('Todo-app/backend') {
+                    withSonarQubeEnv('sonar-server') {
+                        sh "${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=three-tier-backend -Dsonar.projectName=three-tier-backend"
+                    }
+                }
+            }
+        }
 
         // stage('Quality Gate') {
         //     steps {
