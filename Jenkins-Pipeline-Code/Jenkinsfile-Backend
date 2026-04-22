@@ -52,12 +52,12 @@ pipeline {
             steps {
                 dir('Todo-app/backend') {
                     withCredentials([string(credentialsId: 'nvdApiKey', variable: 'NVD_KEY')]) {
-                        dependencyCheck additionalArguments: """
+                        dependencyCheck additionalArguments: '
                             --scan ./
                             --disableYarnAudit
                             --disableNodeAudit
-                            --nvdApiKey ${NVD_KEY}
-                        """, odcInstallation: 'DP-Check'
+                            --nvdApiKey $NVD_KEY
+                        ', odcInstallation: 'DP-Check'
                         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
