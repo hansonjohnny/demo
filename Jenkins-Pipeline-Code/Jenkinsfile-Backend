@@ -52,17 +52,12 @@ pipeline {
             steps {
                 dir('Todo-app/backend') {
                     withCredentials([string(credentialsId: 'nvdApiKey', variable: 'NVD_KEY')]) {
-                        dependencyCheck additionalArguments: '
-                            --scan ./
-                            --disableYarnAudit
-                            --disableNodeAudit
-                            --nvdApiKey $NVD_KEY
-                        ', odcInstallation: 'DP-Check'
+                        dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --nvdApiKey $NVD_KEY', odcInstallation: 'DP-Check'
                         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                    }
+                }
             }
         }
-    }
-}
 
         stage('Trivy File Scan') {
             steps {
