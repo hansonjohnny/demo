@@ -95,47 +95,43 @@ pipeline {
             }
         }
 
-        // stage('Checkout Code') {
-        //     steps {
-        //          git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/hansonjohnny/demo.git'
-        //     }
-        // }
+        stage('Checkout Code') {
+            steps {
+                 git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/hansonjohnny/demo.git'
+            }
+        }
 
-        // stage('Update Helm Values') {
-        //     environment {
-        //         GIT_REPO_NAME = "DevOps"
-        //         GIT_USER_NAME = "hansonjohnny"
-        //     }
-            // steps {
-            //     script {
-            //         dir('helm/backend-chart') {
-            //             withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-            //                 sh '''
-            //                     set -e
-
-            //                     git config user.email "hansonjohnny648@gmail.com"
-            //                     git config user.name "hansonjohnny"
-
-            //                     echo "Updating Helm values.yaml with new image tag..."
-
-            //                     # Update only the tag
-            //                     sed -i "s|tag: .*|tag: ${BUILD_NUMBER}|g" values.yaml
-
-            //                     echo "New values.yaml:"
-            //                     cat values.yaml
-
-            //                     git add values.yaml
-
-            //                     # Commit only if changed
-            //                     git diff --cached --quiet || git commit -m "Update backend image to ${BUILD_NUMBER}"
-
-            //                     git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
-            //                 '''
-            //             }
-            //         }
-            //     }
-            // }
-        // }
-
+    //     stage('Update Kubernetes Deployment') {
+    //          environment {
+    //             GIT_REPO_NAME = "DevOps"
+    //             GIT_USER_NAME = "hansonjohnny"
+    //         }
+    //         steps {
+    //             script {
+    //                 dir('Kubernetes-Manifests-file/Backend') {
+    //                     withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+    //                         sh '''
+    //                             git config user.email "hansonjohnny648@gmail.com"
+    //                             git config user.name "hansonjohnny"
+    //                             BUILD_NUMBER=${BUILD_NUMBER}
+    //                             echo $BUILD_NUMBER
+    //                             imageTag=$(grep -oP '(?<=backend:)[^ ]+' deployment.yaml)
+    //                             echo $imageTag
+    //                             sed -i "s/${AWS_ECR_REPO_NAME}:${imageTag}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}/" deployment.yaml
+    //                             git add deployment.yaml
+    //                             git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
+    //                             git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+    //                         '''
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    }
+    post {
+        always {
+            cleanWs()  // Clean workspace after the pipeline runs
+        }
     }
 }
