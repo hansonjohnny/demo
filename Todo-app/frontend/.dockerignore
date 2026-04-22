@@ -1,2 +1,5 @@
+.env
+*.pem
+*.key
 node_modules
-build
+.git

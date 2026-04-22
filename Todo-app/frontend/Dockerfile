@@ -14,10 +14,11 @@ RUN npm run build
 # ---------- Stage 2: Serve with Nginx ----------
 FROM nginx:alpine
 
-# Copy build output to nginx
 COPY --from=builder /app/build /usr/share/nginx/html
 
-# Expose port
-EXPOSE 80
+# Run as non-root user
+RUN chown -R nginx:nginx /usr/share/nginx/html
+USER nginx
 
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
