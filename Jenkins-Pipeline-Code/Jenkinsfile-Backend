@@ -12,6 +12,7 @@ pipeline {
         AWS_ECR_REPO_NAME = credentials('ECR_REPO2')
         AWS_DEFAULT_REGION = 'us-east-2'
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/"
+        NVD_KEY = credentials('nvdApiKey')
     }
 
     stages {
@@ -50,11 +51,18 @@ pipeline {
         stage('OWASP Dependency-Check Scan') {
             steps {
                 dir('Todo-app/backend') {
-                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
-                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-                }
+                    withCredentials([string(credentialsId: 'nvdApiKey', variable: 'NVD_KEY')]) {
+                        dependencyCheck additionalArguments: """
+                            --scan ./
+                            --disableYarnAudit
+                            --disableNodeAudit
+                            --nvdApiKey ${NVD_KEY}
+                        """, odcInstallation: 'DP-Check'
+                        dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
+    }
+}
 
         stage('Trivy File Scan') {
             steps {
