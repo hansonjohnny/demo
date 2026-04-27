@@ -1,9 +1,16 @@
-cat >> .gitignore << EOF
-# Terraform
-**/.terraform/
-**/.terraform.lock.hcl
-*.tfstate
-*.tfstate.backup
-*.tfvars
-terraform-provider-*
-EOF
+.env
+
+# Terraform sensitive files
+terraform-files/variables.tfvars
+terraform-files/.terraform/
+terraform-files/.terraform.lock.hcl
+terraform-files/*.tfstate
+terraform-files/*.tfstate.backup
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Docker
+*.log
