@@ -188,24 +188,19 @@ pipeline {
                 GIT_USER_NAME = "hansonjohnny"
             }
             steps {
-                script {
+                withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
                     dir('K8-Files/Backend') {
-                        withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-                            sh """
-                                git config user.email "hansonjohnny648@gmail.com"
-                                git config user.name "hansonjohnny"
+                        sh """
+                            git config user.email "hansonjohnny648@gmail.com"
+                            git config user.name "hansonjohnny"
 
-                                git config credential.helper '!f() { echo "username=x-token"; echo "password=${GITHUB_TOKEN}"; }; f'
+                            # update image tag in deployment.yaml
+                            sed -i "s|image:.*|image: ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}|g" deployment.yaml
 
-                                imageTag=$(grep -oP '(?<=backend:)[^ ]+' deployment.yaml)
-                                sed -i "s|${AWS_ECR_REPO_NAME}:${imageTag}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}/" deployment.yaml
-
-                                git add deployment.yaml
-                                git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
-
-                                git push https://github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
-                            """
-                        }
+                            git add deployment.yaml
+                            git commit -m "ci: update backend image to build ${BUILD_NUMBER}"
+                            git push https://${GIT_USER_NAME}:\${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git HEAD:main
+                        """
                     }
                 }
             }
