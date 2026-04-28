@@ -65,7 +65,7 @@ pipeline {
             steps {
                 script {
                     // Ensure report directory exists
-                    sh "mkdir -p reports/owasp"
+                    sh "mkdir -p ${WORKSPACE}/reports/owasp"
                 }
 
                 dir('Todo-app/backend') {
@@ -89,7 +89,7 @@ pipeline {
 
                 // Publish results to Jenkins
                 dependencyCheckPublisher(
-                    pattern: 'reports/owasp/dependency-check-report.xml',
+                    pattern: '**/reports/owasp/dependency-check-report.xml',
                     failedTotalCritical: 1,
                     failedTotalHigh: 5
                 )
@@ -99,7 +99,7 @@ pipeline {
         stage('Trivy File System Scan') {
             steps {
                 script {
-                    sh "mkdir -p reports/trivy"
+                    sh "mkdir -p ${WORKSPACE}/reports/trivy"
                 }
 
                 dir('Todo-app/backend') {
