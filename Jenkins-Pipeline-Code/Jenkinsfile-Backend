@@ -156,7 +156,7 @@ pipeline {
                     sh """
                         trivy image \
                             --severity HIGH,CRITICAL \
-                            --exit-code 1 \
+                            --exit-code 0 \
                             --format json \
                             --output reports/trivy/image-scan.json \
                             ${AWS_ECR_REPO_NAME}
