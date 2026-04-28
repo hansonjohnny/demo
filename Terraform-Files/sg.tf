@@ -72,6 +72,17 @@ resource "aws_security_group_rule" "eks_cluster_ingress_nodes" {
   description              = "Allow nodes to talk to cluster API"
 }
 
+# allow Jenkins EC2 to reach EKS control plane
+resource "aws_security_group_rule" "eks_cluster_ingress_jenkins" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.eks_cluster.id
+  source_security_group_id = aws_security_group.jenkins.id
+  description              = "Allow Jenkins to reach EKS API"
+}
+
 
 # ─────────────────────────────────────────
 # SECURITY GROUP — EKS WORKER NODES

@@ -5,3 +5,5 @@ metadata:
   labels:
     name: three-tier
     environment: dev
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
