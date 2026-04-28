@@ -191,7 +191,7 @@ pipeline {
                 script {
                     dir('K8-Files/Backend') {
                         withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-                            sh '''
+                            sh """
                                 git config user.email "hansonjohnny648@gmail.com"
                                 git config user.name "hansonjohnny"
 
@@ -204,7 +204,7 @@ pipeline {
                                 git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
 
                                 git push https://github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
-                            '''
+                            """
                         }
                     }
                 }
