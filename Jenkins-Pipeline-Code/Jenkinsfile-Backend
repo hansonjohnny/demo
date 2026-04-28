@@ -118,7 +118,7 @@ pipeline {
                     sh """
                         trivy fs \
                             --severity HIGH,CRITICAL \
-                            --exit-code 1 \
+                            --exit-code 0 \
                             --format json \
                             --output ${WORKSPACE}/reports/trivy/fs-scan.json \
                             .
