@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: 669836379908.dkr.ecr.us-east-2.amazonaws.com/todo-app/backend:latest
+          image: 669836379908.dkr.ecr.us-east-2.amazonaws.com/todo-app/backend:23
           ports:
             - containerPort: 5000
 
