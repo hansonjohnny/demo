@@ -50,6 +50,27 @@ resource "aws_iam_role_policy" "jenkins_eks_full" {
   })
 }
 
+# allows Jenkins to manage EKS addons
+resource "aws_iam_role_policy" "jenkins_eks_addons" {
+  name = "${var.project_name}-jenkins-eks-addons"
+  role = aws_iam_role.jenkins_ec2.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "eks:CreateAddon",
+        "eks:DescribeAddon",
+        "eks:UpdateAddon",
+        "eks:DeleteAddon",
+        "eks:ListAddons"
+      ]
+      Resource = "*"
+    }]
+  })
+}
+
 # allows Jenkins to describe EC2 resources
 resource "aws_iam_role_policy_attachment" "jenkins_ec2_readonly" {
   role       = aws_iam_role.jenkins_ec2.name
@@ -79,6 +100,7 @@ resource "aws_iam_role_policy_attachment" "eks_ecr_readonly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
+# allows EBS CSI driver to provision volumes for pods
 resource "aws_iam_role_policy_attachment" "eks_ebs_csi" {
   role       = aws_iam_role.eks_nodes.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
