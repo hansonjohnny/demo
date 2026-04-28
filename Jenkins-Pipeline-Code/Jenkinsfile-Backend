@@ -59,7 +59,7 @@ pipeline {
                     waitForQualityGate abortPipeline: true
                 }
             }
-        }}
+        }
 
         stage('OWASP Dependency-Check Scan') {
             steps {
@@ -173,7 +173,7 @@ pipeline {
             }
         }
 
-        stage("Checkout") {
+        stage("Checkout Code") {
             steps {
                 echo "Checking out branch: ${env.BRANCH_NAME}"
                 checkout scm
@@ -208,12 +208,12 @@ pipeline {
         //         }
         //     }
         // }
-
     }
 
-    post {
-        always {
-            cleanWs()  // Clean workspace after the pipeline runs
-        }
+post {
+    always {
+        cleanWs()  // Clean workspace after the pipeline runs
     }
 }
+}
+
