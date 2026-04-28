@@ -86,6 +86,9 @@ pipeline {
                         )
                     }
                 }
+                 // ── debug — show exactly what was generated ──
+                sh "find ${WORKSPACE} -name 'dependency-check-report*' 2>/dev/null"
+                sh "ls -la ${WORKSPACE}/reports/owasp/ || echo 'directory empty or missing'"
 
                 // Publish results to Jenkins
                 dependencyCheckPublisher(
