@@ -72,7 +72,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'nvdApiKey', variable: 'NVD_KEY')]) {
 
                         dependencyCheck(
-                            odcInstallation: 'OWASP-Dependency-Check',
+                            odcInstallation: 'DP-Check',
                             additionalArguments: """
                                 --scan . \
                                 --format XML \
