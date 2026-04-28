@@ -198,7 +198,7 @@ pipeline {
                                 git config credential.helper '!f() { echo "username=x-token"; echo "password=${GITHUB_TOKEN}"; }; f'
 
                                 imageTag=$(grep -oP '(?<=backend:)[^ ]+' deployment.yaml)
-                                sed -i "s/${AWS_ECR_REPO_NAME}:${imageTag}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}/" deployment.yaml
+                                sed -i "s|${AWS_ECR_REPO_NAME}:${imageTag}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}/" deployment.yaml
 
                                 git add deployment.yaml
                                 git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
