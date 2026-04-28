@@ -77,7 +77,6 @@ pipeline {
                                 --scan . \
                                 --format XML \
                                 --format HTML \
-                                --out ${WORKSPACE}/reports/owasp \
                                 --prettyPrint \
                                 --nvdApiKey $NVD_KEY \
                                 --disableYarnAudit \
@@ -87,12 +86,12 @@ pipeline {
                     }
                 }
                  // ── debug — show exactly what was generated ──
-                sh "find ${WORKSPACE} -name 'dependency-check-report*' 2>/dev/null"
+                sh "find ${WORKSPACE} -name 'DP-check-report*' 2>/dev/null"
                 sh "ls -la ${WORKSPACE}/reports/owasp/ || echo 'directory empty or missing'"
 
                 // Publish results to Jenkins
                 dependencyCheckPublisher(
-                    pattern: '**/reports/owasp/dependency-check-report.xml',
+                    pattern: 'DP-check-report.xml',
                     failedTotalCritical: 1,
                     failedTotalHigh: 5
                 )
