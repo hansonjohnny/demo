@@ -91,7 +91,7 @@ pipeline {
 
                 // Publish results to Jenkins
                 dependencyCheckPublisher(
-                    pattern: 'DP-check-report.xml',
+                    pattern: 'Todo-app/backend/dependency-check-report.xml',
                     failedTotalCritical: 1,
                     failedTotalHigh: 5
                 )
