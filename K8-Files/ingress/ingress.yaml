@@ -31,6 +31,9 @@ metadata:
     # listen on HTTP (add HTTPS once you have a certificate)
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
 
+    alb.ingress.kubernetes.io/healthcheck-port: "5000"
+    alb.ingress.kubernetes.io/success-codes: "200"
+
 spec:
   rules:
     - http:

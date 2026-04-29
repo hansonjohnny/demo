@@ -120,6 +120,15 @@ resource "aws_security_group" "eks_nodes" {
     description     = "Allow ALB to reach pods on port 80"
   }
 
+  # ALB forwards traffic to backend pods on port 5000
+  ingress {
+    from_port       = 5000
+    to_port         = 5000
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb.id]
+    description     = "Allow ALB to reach backend pods on port 5000"
+  }
+
   # ALB forwards HTTPS traffic to pods
   ingress {
     from_port       = 443
