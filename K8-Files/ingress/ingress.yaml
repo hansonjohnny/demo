@@ -15,10 +15,10 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
 
     # place the ALB in the public subnets
-    alb.ingress.kubernetes.io/subnets: <PUBLIC_SUBNET_1_ID>,<PUBLIC_SUBNET_2_ID>
+    alb.ingress.kubernetes.io/subnets: subnet-0cffe6733da61a7cd,subnet-0277ae0803d02363b
 
     # attach the ALB security group
-    alb.ingress.kubernetes.io/security-groups: <ALB_SECURITY_GROUP_ID>
+    alb.ingress.kubernetes.io/security-groups: sg-02059fc3bda12a6a7
 
     # health check settings
     alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
