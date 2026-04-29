@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: 669836379908.dkr.ecr.us-east-2.amazonaws.com/todo-app/frontend:3
+          image: 669836379908.dkr.ecr.us-east-2.amazonaws.com/todo-app/frontend:4
           ports:
             - containerPort: 80
 
