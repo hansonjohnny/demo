@@ -88,3 +88,35 @@ resource "aws_iam_openid_connect_provider" "eks" {
     Environment = var.environment
   }
 }
+
+# ─────────────────────────────────────────
+# IAM ROLE — EBS CSI DRIVER (IRSA)
+# assumed by the EBS CSI controller
+# service account via OIDC
+# required to provision EBS volumes for PVCs
+# ─────────────────────────────────────────
+resource "aws_iam_role" "ebs_csi" {
+  name = "${var.project_name}-ebs-csi-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Federated = aws_iam_openid_connect_provider.eks.arn
+      }
+      Action = "sts:AssumeRoleWithWebIdentity"
+      Condition = {
+        StringEquals = {
+          "${replace(aws_iam_openid_connect_provider.eks.url, "https://", "")}:sub" = "system:serviceaccount:kube-system:ebs-csi-controller-sa"
+          "${replace(aws_iam_openid_connect_provider.eks.url, "https://", "")}:aud" = "sts.amazonaws.com"
+        }
+      }
+    }]
+  })
+
+  tags = {
+    Name        = "${var.project_name}-ebs-csi-role"
+    Environment = var.environment
+  }
+}
