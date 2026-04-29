@@ -1,44 +1,27 @@
-# ─────────────────────────────────────────
-# INGRESS — ALB INGRESS CONTROLLER
-# routes external traffic to frontend and backend
-# requires AWS Load Balancer Controller installed on cluster
-# ─────────────────────────────────────────
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: todo-app-ingress
   namespace: three-tier
   annotations:
-    # tells the ALB controller to create an internet-facing ALB
-    kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-
-    # place the ALB in the public subnets
     alb.ingress.kubernetes.io/subnets: subnet-0cffe6733da61a7cd,subnet-0277ae0803d02363b
-
-    # attach the ALB security group
     alb.ingress.kubernetes.io/security-groups: sg-02059fc3bda12a6a7
-
-    # health check settings
     alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
     alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/healthcheck-port: "5000"
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: "30"
     alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "5"
     alb.ingress.kubernetes.io/healthy-threshold-count: "2"
     alb.ingress.kubernetes.io/unhealthy-threshold-count: "3"
-
-    # listen on HTTP (add HTTPS once you have a certificate)
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
-
-    alb.ingress.kubernetes.io/healthcheck-port: "5000"
     alb.ingress.kubernetes.io/success-codes: "200"
-
 spec:
+  ingressClassName: alb     # ← add this
   rules:
     - http:
         paths:
-          # API traffic → backend service
           - path: /api
             pathType: Prefix
             backend:
@@ -46,8 +29,6 @@ spec:
                 name: backend-service
                 port:
                   number: 5000
-
-          # health check endpoint → backend
           - path: /health
             pathType: Exact
             backend:
@@ -55,8 +36,6 @@ spec:
                 name: backend-service
                 port:
                   number: 5000
-
-          # all other traffic → frontend service
           - path: /
             pathType: Prefix
             backend:
